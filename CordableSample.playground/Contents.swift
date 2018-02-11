@@ -22,13 +22,14 @@ struct User: Codable {
     var age: Int
 }
 
-enum Signal: String, Codable {
+enum Signal: String, Codable { // RawRepresentableに準拠
     case red
     case green
     case blue
 }
 
-let jsonString = """
+// ルートがDictionary
+let dictionaryJsonString = """
 {
     "intValue": 1000,
     "stringValue": "stringValue",
@@ -42,6 +43,39 @@ let jsonString = """
 }
 """
 
-let jsonData = jsonString.data(using: .utf8)!
-let someStruct = try! JSONDecoder().decode(SomeStruct.self, from: jsonData)
-print(someStruct)
+let dictionaryJsonData = dictionaryJsonString.data(using: .utf8)!
+let dictionaryDecorded = try! JSONDecoder().decode(SomeStruct.self, from: dictionaryJsonData)
+print(dictionaryDecorded)
+
+// ルートがArray
+let arrayJsonString = """
+[
+    {
+        "intValue": 1000,
+        "stringValue": "stringValue",
+        "boolValue": true,
+        "arrayValue": [1, 2, 3],
+        "dictionaryValue": {"dictionaryKey": "dictionaryValue"},
+        "customValue": {"name": "田中太郎", "age": 20},
+        "enumValue": "green",
+        "optionalValue": null,
+        "nestedStruct": {"intValue": 2000, "stringValue": "hoge"}
+    },
+    {
+        "intValue": 1000,
+        "stringValue": "stringValue",
+        "boolValue": true,
+        "arrayValue": [1, 2, 3],
+        "dictionaryValue": {"dictionaryKey": "dictionaryValue"},
+        "customValue": {"name": "田中太郎", "age": 20},
+        "enumValue": "green",
+        "optionalValue": null,
+        "nestedStruct": {"intValue": 2000, "stringValue": "hoge"}
+    }
+]
+"""
+
+let arrayJsonData = arrayJsonString.data(using: .utf8)!
+let arrayDecorded = try! JSONDecoder().decode([SomeStruct].self, from: arrayJsonData)
+print(arrayDecorded)
+
